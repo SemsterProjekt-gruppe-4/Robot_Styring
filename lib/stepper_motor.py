@@ -1,3 +1,4 @@
+# Insert the class for your final version of the Stepper Motor 
 from machine import PWM
 from math import cos, pi
 
@@ -16,11 +17,12 @@ class step_motor:
         self.duty = 65535  
 
         # Define the step sequence for a 4-step motor (full step)
+        # Just to have a starting point if no microstepping is set
         self.step_sequence = [
-            [int(self.duty*0.5), 0, 0, 0],
-            [0, int(self.duty*0.5), 0, 0],
-            [0, 0, int(self.duty*0.5), 0],
-            [0, 0, 0, int(self.duty*0.5)]
+            [int(self.duty*0.2), 0, 0, 0],
+            [0, int(self.duty*0.2), 0, 0],
+            [0, 0, int(self.duty*0.2), 0],
+            [0, 0, 0, int(self.duty*0.2)]
         ]
         # Current position in the step sequence
         self.current_step = 0
@@ -54,7 +56,7 @@ class step_motor:
         self.duty = int(PWM / 100 * 65535)
 
     def set_microsteps(self, microsteps):
-        ''' generates a new step sequence for the given number of microsteps'''
+        ''' gernates a new step sequence for the given number of microsteps'''
         # validate input
         # must be a positive integer
         if microsteps < 1:
@@ -62,7 +64,7 @@ class step_motor:
         
         # 1 = full step, 2 = half step, 4 = quarter step, 8 = eighth step etc'''
 
-        #generate new step sequence for microstepping
+        # gernate new step sequence for microstepping
         # clear existing sequence
         self.step_sequence = []
         # generate new sequence (microsteps per full step * number of full steps (4))
@@ -75,23 +77,23 @@ class step_motor:
             # cos(angle - phase shift) to get the correct phase for each coil
             # max(0, ...) to ensure no negative duty cycles
             step = [
-                max(0,round(cos(angle - 0 * (pi / 2)))),
-                max(0,round(cos(angle - 1 * (pi / 2)))),
-                max(0,round(cos(angle - 2 * (pi / 2)))),
-                max(0,round(cos(angle - 3 * (pi / 2))))
+                max(0,int(round((cos(angle - 0 * (pi / 2)) * self.duty)))),
+                max(0,int(round((cos(angle - 1 * (pi / 2)) * self.duty)))),
+                max(0,int(round((cos(angle - 2 * (pi / 2)) * self.duty)))),
+                max(0,int(round((cos(angle - 3 * (pi / 2)) * self.duty))))
             ]
             # append the calculated step to the step sequence
             self.step_sequence.append(step)
 
     def step(self):
-        '''step the motor in the given direction by one step in the step sequence'''
+        '''step the motor in th'''
         # get the current step from the sequence
         step = self.step_sequence[self.current_step]
         # set the PWM duty cycle for each coil
-        self.pwm1.duty_u16(int(step[0] * self.duty))
-        self.pwm2.duty_u16(int(step[1] * self.duty))
-        self.pwm3.duty_u16(int(step[2] * self.duty))
-        self.pwm4.duty_u16(int(step[3] * self.duty))
+        self.pwm1.duty_u16(step[0])
+        self.pwm2.duty_u16(step[1])
+        self.pwm3.duty_u16(step[2])
+        self.pwm4.duty_u16(step[3])
         # update the current step based on the direction
         if self.direction == -1:
             self.current_step = (self.current_step - 1) % len(self.step_sequence)

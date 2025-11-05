@@ -28,6 +28,7 @@ class step_motor:
         self.current_step = 0
         self.current_microstep = 0
         self.direction = 1 # forwards = 1 and backwards = -1
+        self.microsteps = 1 # default to full step
 
     def release(self):
         '''releases motor "to save power and prevent overheating"'''
@@ -54,14 +55,23 @@ class step_motor:
             raise ValueError("PWM must be between 0 and 100")
         # set duty cycle
         self.duty = int(PWM / 100 * 65535)
+        self.set_microsteps(self.microsteps)
 
-    def set_microsteps(self, microsteps):
+    def set_microsteps(self, microsteps, PWM=None):
         ''' gernates a new step sequence for the given number of microsteps'''
         # validate input
         # must be a positive integer
+        if PWM is not None:
+            # validate input
+            if PWM < 0 or PWM > 100:
+                raise ValueError("PWM must be between 0 and 100")
+            # set duty cycle
+            self.duty = int(PWM / 100 * 65535)
+
         if microsteps < 1:
             raise ValueError("Microsteps must be at least 1")
         
+        self.microsteps = microsteps
         # 1 = full step, 2 = half step, 4 = quarter step, 8 = eighth step etc'''
 
         # gernate new step sequence for microstepping

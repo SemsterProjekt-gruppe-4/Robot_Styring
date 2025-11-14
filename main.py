@@ -14,7 +14,7 @@ def save(t):
 
 
 timer = Timer()
-timer.init(freq=100, mode=Timer.PERIODIC, callback=save)
+timer.init(freq=10, mode=Timer.PERIODIC, callback=save)
 
 # Initialize the stepper motors with their respective GPIO pins
 motor1 = step_motor(0,1,2,3)

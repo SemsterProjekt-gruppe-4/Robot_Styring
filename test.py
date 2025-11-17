@@ -22,9 +22,9 @@ sensor_data = [0,0,0,0,0,0,0,0]
 
 while True:
     for i in range(8):
-        p1.value(sensor_seq[i][0])
+        p3.value(sensor_seq[i][0])
         p2.value(sensor_seq[i][1])
-        p3.value(sensor_seq[i][2])
+        p1.value(sensor_seq[i][2])
         time.sleep(0.05)
         sensor_data[i] = li.read_u16()
         

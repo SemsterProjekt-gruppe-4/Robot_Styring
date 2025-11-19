@@ -70,7 +70,7 @@ class diffdrive:
         steps = int(((self.wheelbase_cir*2)/self.cir)*self.microsteps * 200 * (angle/360))
         
         # sets the direction of the motors based on the turn direction
-        if dir == "right" or dir == "r":
+        if dir == "left" or dir == "l":
             self.motor1.set_direction(1)
 
             # steps the motor the calculated number of steps
@@ -78,7 +78,7 @@ class diffdrive:
                 self.motor1.step()
 
             
-        elif dir == "left" or dir == "l":
+        elif dir == "right" or dir == "r":
             self.motor2.set_direction(1)
             
             # steps the motor the calculated number of steps

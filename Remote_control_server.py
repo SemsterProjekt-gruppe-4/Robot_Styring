@@ -1,0 +1,67 @@
+#caller
+from machine import Pin, ADC
+from stepper_motor import step_motor
+from joystick import Joystick 
+import network
+import socket
+import time
+
+INTERNET_Name = "Maskinens telefon"
+INTERNET_PASSWORD = "frederik" 
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(INTERNET_Name, INTERNET_PASSWORD)
+
+max_wait = 10
+while max_wait>0:
+    if wlan.status()< 0 or wlan.status()>=3:
+        break
+    max_wait -= 1        
+    print('waiting for connection')
+    time.sleep(1)
+
+if wlan.status() != 3:
+    raise RuntimeError('network connection failed')
+else:
+    print('connected')
+    status = wlan.ifconfig()
+    print('ip='+status[0])
+    
+addr = socket.getaddrinfo ('0.0.0.0', 80)[0][-1]
+
+s=socket.socket()
+try:
+    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+except Exception:
+    pass
+s.bind(addr)
+s.listen(1)
+print('listening on', addr)
+
+motor1 = step_motor(0,1,2,3)
+motor2 = step_motor(4,5,6,7)
+
+joystick = Joystick(26, 27, motor1, motor2)
+joystick.calibrate()
+pot = ADC(Pin(28))
+        
+while True:
+    cl, client_addr = s.accept()
+    print('client connected:', client_addr)
+    
+    while True:
+        try:
+            cl.setblocking(False)
+            request = cl.recv(1024)
+            print('request:', request)
+        except Exception:
+            pass
+
+        direction = joystick.direction()
+        delay = str(0.1 - (65535 - pot.read_u16()) / 65535 * 0.099)
+        message =  direction + "," + delay
+
+        cl.setblocking(True)
+        cl.send(message.encode())
+        print('sent:', direction)
+        time.sleep(0.5)

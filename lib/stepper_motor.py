@@ -1,4 +1,3 @@
-# Insert the class for your final version of the Stepper Motor 
 from machine import PWM
 from math import cos, pi
 

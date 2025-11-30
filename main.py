@@ -10,7 +10,7 @@ import _thread
 INTERNET_Name = "Bosssebastian's Phone"
 INTERNET_PASSWORD = "123456789"
 
-# IP address of the server
+# IP address of the server (has to be changed to the server's IP)
 IP = "10.179.176.129"
 
 # Set default delay

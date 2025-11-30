@@ -69,7 +69,7 @@ while True:
                 message = (direction + "," + str(delay))
 
                 cl.send(message)
-                print(message)
+                # print(message)
                 # Update OLED display every 10 loops
                 oledCounter += 1
 

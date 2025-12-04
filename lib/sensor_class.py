@@ -1,3 +1,5 @@
+import time
+from machine import Pin, ADC
 class sensor: 
     def __init__(self, ADC_input, s0, s1, s2):
         self.ADC = ADC(Pin(ADC_input))
@@ -21,11 +23,12 @@ class sensor:
     def read_sensor_data(self, sensor_cutoff):
         for i in range(len(self.sensor_seq)):
 
-            self.s2.value(self.sensor_seq[i][0])
-            self.s1.value(self.sensor_seq[i][1])
             self.s0.value(self.sensor_seq[i][2])
+            self.s1.value(self.sensor_seq[i][1])
+            self.s2.value(self.sensor_seq[i][0])
 
-            time.sleep(0.05)
+            # not certian this is needed
+            #time.sleep(0.0000001)
 
             voltage = self.ADC.read_u16() * 3.3 / 65536
 

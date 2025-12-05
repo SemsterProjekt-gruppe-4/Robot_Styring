@@ -1,7 +1,7 @@
 from machine import Pin, PWM
 import time
 
-class Servo:
+class Truckbed:
     def __init__(self, pin, freq=50, min_duty=1638, max_duty=8192):
         # Initialize PWM pin
         self.servo = PWM(Pin(pin))
@@ -21,6 +21,8 @@ class Servo:
         time.sleep(delay)
         self.set_angle(end_angle)
 
-truckbed_servo = Servo(pin=16)
 
-truckbed_servo.empty(90,0)  
+#To Use
+tb = Truckbed(pin=16)
+
+tb.empty(90,0)  

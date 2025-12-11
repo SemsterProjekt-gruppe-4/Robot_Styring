@@ -1,5 +1,6 @@
 class linefollower:
     def __init__(self, sensor_obj, motorleft, motorright):
+        '''sensor_obj, motorleft, motorright'''
         self.sensor = sensor_obj
         self.motorleft = motorleft
         self.motorright = motorright
@@ -8,18 +9,20 @@ class linefollower:
 
 
     def follow_line(self):
+        # Get the sensor data
         sensor_data = self.sensor.read_sensor_data(1.7)
 
+        # resets variables
         right_step = 0
         left_step = 0
         total_step = 0
 
+        # checks if the two outer sensor is triggered
         if sensor_data[0] == 1 and sensor_data[7] == 1:
             #print("Both outer sensors triggered: Stop")
             self.motorleft.release()
             self.motorright.release()
-
-            return 0, 0
+            return 0
         else:
             if sensor_data[0] == 1:
                 right_step += 1
@@ -65,7 +68,8 @@ class linefollower:
                 #print("No sensors triggered: Lost line")
                 self.motorleft.release()
                 self.motorright.release()
-                return 0, 0
+                return 0
+            
             self.right_steps += (right_step / total_step)
             self.left_steps += (left_step / total_step)
             #print(f"Calculated steps - Right: {self.right_steps}, Left: {self.left_steps}")

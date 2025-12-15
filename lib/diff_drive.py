@@ -2,14 +2,14 @@
 import time
 
 class diffdrive:
-    def __init__(self, motor1: step_motor, motor2: step_motor, cir, microsteps):
+    def __init__(self, motor1, motor2, cir, microsteps = 8, PWM = 30):
         # Initialize the differential drive with two stepper motors, wheel circumference, and microsteps
         self.motor1 = motor1
         self.motor2 = motor2
         
         # set microsteps for both motors
-        self.motor1.set_microsteps(microsteps)
-        self.motor2.set_microsteps(microsteps)
+        self.motor1.set_microsteps(microsteps, PWM)
+        self.motor2.set_microsteps(microsteps, PWM)
         # store microsteps
         self.microsteps = microsteps
         
@@ -25,14 +25,13 @@ class diffdrive:
         # Length / (circumference * steps per rev * microsteps) = number of microsteps to move
         steps = int((length/self.cir)* self.microsteps * 200) # calculate number of microsteps to move
         
-        if dir == -1:
-            #sets the direction of the motors to backwards
-            self.motor1.set_direction(-1)
-            self.motor2.set_direction(-1)
-        else:
-            #sets the direction of the motors to forwards
-            self.motor1.set_direction(1)
-            self.motor2.set_direction(1)
+        # checks that the direction is valid
+        if dir != 1 and dir != -1:
+            raise ValueError('Direction must either be 1 (forwards) or -1 (backwards)')
+
+        # sets the direction of both motors
+        self.motor1.set_direction(dir)
+        self.motor2.set_direction(dir)
         
         #steps the motors the calculated number of steps
         for _ in range(steps):

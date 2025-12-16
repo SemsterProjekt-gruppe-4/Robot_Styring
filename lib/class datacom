@@ -1,0 +1,29 @@
+#Class datacommunication
+class DataCom: 
+    def __init__(self, tx_pin, rx_pin, baudrate=9600):
+        self.uart = UART(0, baudrate=baudrate, tx=Pin(tx_pin), rx=Pin(rx_pin))
+
+    def calibrate_datacom(self, timeout=10):
+        start_time = time()
+        while time() - start_time < timeout: 
+            # Send calibration command
+            message = "CALIBRATE"
+            self.uart.write(message)
+            print("Sent:", message)
+            # wait for device to respond
+            sleep(1)
+            # Read data
+            if self.uart.any(): # Check if there is data to read
+                data = self.uart.read(20)  # Read up to 20 bytes
+                if data:
+                    print("Received:", data.decode('utf-8'))
+    
+    def send_data(self, message):
+        self.uart.write(message)
+    
+    def receive_data(self):
+        if self.uart.any():
+            data = self.uart.read(20)
+            if data:
+                return data.decode('utf-8')
+        return None

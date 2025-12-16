@@ -1,7 +1,7 @@
 # Idea for have to navigate logistic parts of a project
 
 # imports
-from machine import Pin
+from machine import Pin, ADC
 from stepper_motor import step_motor
 from diff_drive import diffdrive
 from line_follower import line_follower
@@ -16,9 +16,9 @@ motor_right=step_motor(4,5,6,7)
 sensors = sensor(26,12,13,14)
 linefollower = line_follower(motor_left, motor_right, sensors)
 diffdrive = diffdrive(motor_left, motor_right, 267)
-# induction_sensor_left = induction_sensor(pin_number) or ADC(pin_number)
-# induction_sensor_right = induction_sensor(pin_number) or ADC(pin_number)
-# magnet = Pin(pin_number, Pin.OUT)
+induction_sensor_left = ADC(27)
+induction_sensor_right = ADC(28)
+magnet = Pin(11, Pin.OUT)
 
 # define variables
 section = 1

@@ -1,11 +1,13 @@
 import time
 from machine import Pin, ADC
 class sensor: 
-    def __init__(self, ADC_input, s0, s1, s2):
+    def __init__(self, ADC_input, s0, s1, s2, cutoff):
         self.ADC = ADC(Pin(ADC_input))
         self.s0 = Pin(s0, Pin.OUT)
         self.s1 = Pin(s1, Pin.OUT)
         self.s2 = Pin(s2, Pin.OUT)
+
+        self.cutoff = int(cutoff * 65536 / 3.3)
 
         self.sensor_data = [0] * 8
 
@@ -20,7 +22,7 @@ class sensor:
             [1,0,0]
         ]
 
-    def read_sensor_data(self, sensor_cutoff):
+    def read_sensor_data(self):
         for i in range(len(self.sensor_seq)):
 
             self.s0.value(self.sensor_seq[i][2])
@@ -28,14 +30,13 @@ class sensor:
             self.s2.value(self.sensor_seq[i][0])
 
             # not certian this is needed
-            #time.sleep(0.0000001)
+            time.sleep(0.000000001) # some how saved the day
 
-            voltage = self.ADC.read_u16() * 3.3 / 65536
+            voltage = self.ADC.read_u16()
 
-            if voltage < sensor_cutoff:
+            if voltage < self.cutoff:
                 self.sensor_data[i] = 1
             else:
                 self.sensor_data[i] = 0
 
         return self.sensor_data
-

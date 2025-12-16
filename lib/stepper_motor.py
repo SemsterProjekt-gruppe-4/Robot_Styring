@@ -7,10 +7,10 @@ class step_motor:
         Motor Pin 1-4, 
         '''
         # Initialize PWM on motor control pins
-        self.pwm1 = PWM(pin1, freq=18000)
-        self.pwm2 = PWM(pin2, freq=18000)
-        self.pwm3 = PWM(pin3, freq=18000)
-        self.pwm4 = PWM(pin4, freq=18000)
+        self.pwm1 = PWM(pin1, freq=50000)
+        self.pwm2 = PWM(pin2, freq=50000)
+        self.pwm3 = PWM(pin3, freq=50000)
+        self.pwm4 = PWM(pin4, freq=50000)
 
         # Max duty cycle for 16-bit PWM
         self.duty = 65535  
@@ -108,4 +108,3 @@ class step_motor:
             self.current_step = (self.current_step - 1) % len(self.step_sequence)
         else:
             self.current_step = (self.current_step + 1) % len(self.step_sequence)
-

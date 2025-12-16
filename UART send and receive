@@ -1,0 +1,42 @@
+
+#PANZA
+from machine import UART, PIN
+from time import sleep
+
+#Initialize UART
+uart = UART(0, baudrate=9600, tx=PIN(12), rx=PIN(13))
+
+
+while True: 
+    #send data
+    message = "TEST"
+    uart.write(message)
+    print("Sent:", message)
+    #Allow time for the device to respond
+    sleep(1)
+    #read data
+    if uart.any(): #Check if there is data to read
+        data = uart.read(20)  #Read up to 20 bytes
+        if data:
+            print("Received:", data.decode('utf-8'))
+
+
+#practice board
+from machine import Pin, UART
+from time import sleep
+import utime
+
+# Initialize UART
+uart = UART(0, baudrate=9600, tx=Pin(12), rx=Pin(13))
+
+while True:
+    if uart.any(): # Check if there is data to read
+        data = uart.read(20)  # Read up to 20 bytes
+        if data: 
+            print("Received:", data.decode('utf-8'))
+    sleep(0.1)  # Small delay to avoid busy waiting
+    # Send data
+    message = "TEST"
+    uart.write(message)
+    print("Sent:", message)
+    sleep(1)  # Allow time for the device to respond

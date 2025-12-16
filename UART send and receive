@@ -1,3 +1,5 @@
+
+#PANZA
 from machine import UART, PIN
 from time import sleep
 
@@ -19,6 +21,7 @@ while True:
             print("Received:", data.decode('utf-8'))
 
 
+#practice board
 from machine import Pin, UART
 from time import sleep
 import utime

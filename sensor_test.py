@@ -1,9 +1,10 @@
-from stepper_motor import step_motor
+from stepper_class import step_motor
 from machine import ADC, Pin
-import asyncio
+from math import pi
+import time
 
 # Open file to log sensor readings
-file = open("sensor_test_output.txt", "w")
+file = open("sensor_test_output.csv", "w")
 
 
 
@@ -21,14 +22,20 @@ s1.value(1)  # setting the pin to high so we read from a sensor in the middle
 sensor = ADC(26)  # Assuming a single analog sensor for simplicity
 
 # Define parameters
-wheelbase_cir = 770
+circumference = int(140*pi)
+wheelbase = int(210*pi)
 angle = 180
-cir = 267
 microsteps = 8
 
-# Calculate steps needed for the desired rotation
-steps = int((wheelbase_cir/cir)*microsteps * 200 * (angle/360))
 
+time.sleep(5)
+
+
+# Calculate steps needed for the desired rotation
+steps = int((wheelbase/circumference)*microsteps * 200 * (angle/360))
+
+motor1.set_direction(-1)
+motor2.set_direction(1)
 for _ in range(steps):
     # Perform steps in forward direction
     motor1.step()
@@ -38,13 +45,18 @@ for _ in range(steps):
     file.write(str(sensor.read_u16()))
     file.write("\n") 
 
+    time.sleep(0.002)
+
 # Release motors after operation
 motor1.release()
 motor2.release()
 
+time.sleep(2)
+
 # Change direction for reverse rotation
-motor1.set_direction(-1)
+motor1.set_direction(1)
 motor2.set_direction(-1)
+
 
 for _ in range(steps):
     # Perform steps in reverse direction
@@ -54,6 +66,8 @@ for _ in range(steps):
     # Log sensor readings
     file.write(str(sensor.read_u16()))
     file.write("\n") 
+
+    time.sleep(0.002)
 
 # Release motors after operation
 motor1.release()

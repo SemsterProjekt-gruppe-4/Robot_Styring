@@ -1,4 +1,3 @@
-# Insert the class for your final version of the Stepper Motor 
 from machine import PWM
 from math import cos, pi
 
@@ -109,4 +108,3 @@ class step_motor:
             self.current_step = (self.current_step - 1) % len(self.step_sequence)
         else:
             self.current_step = (self.current_step + 1) % len(self.step_sequence)
-

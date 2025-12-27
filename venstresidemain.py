@@ -5,7 +5,7 @@ from time import sleep
 from sensor import sensor
 from insensor import insensor
 from DataCom import DataCom
-from line_follower_class_return import linefollower
+from line_follower_class_left import linefollower
 from diffdrive import diffdrive
 from math import cos, pi
 
@@ -40,7 +40,7 @@ linefollower = linefollower(sensor, motorL, motorR)
 circumfrense=int(140*pi)
 wheelbase=int(210*pi)
 
-diffdrive = diffdrive(motorR, motorL, circumfrense, 16, wheelbase)
+diffdrive = diffdrive(motorR, motorL, circumfrense, 8, wheelbase)
 
 print(2)
 
@@ -50,15 +50,24 @@ sleep(1)
 
 print(3)
 
-while True:
-    # drives the robot
-    linefollower.drive()
+test = 0
+nut_count = 0
+# drives the robot
+sleep(2)
+diffdrive.drive(2270,1)
+motorR.release()
+motorL.release()
+diffdrive.turn(90, 'right')
+#sleep(1)
+while True: 
+    linefollower.drive() 
     if insensor.read() == 1:
+        nut_count += 1
         print(6)
         diffdrive.drive(160, dir=1)
         print(4)
         motorR.release()
-        motorL.release(),
+        motorL.release()
         diffdrive.turn(100, 'right')
         print
         sleep(1)
@@ -78,7 +87,7 @@ while True:
         
         sleep(0.2)
         twerk_timer = 0
-        electromagnet.duty_u16(32768)
+        electromagnet.duty_u16(40000)
         while twerk_timer <= 5:
             diffdrive.turn(10, 'left') 
             sleep(0.5)
@@ -98,7 +107,14 @@ while True:
         #if uart.wait_for_message('arm up', timeout=20):
             #print('Arm up acknowledged')
 
-
-        diffdrive.turn(90, 'right')
+        diffdrive.turn(80, 'left')
         motorR.release()
         motorL.release()
+        
+        if nut_count == 2:
+            diffdrive.turn(45, 'left')
+            diffdrive.drive(500, dir=1)
+                
+                
+                
+                

@@ -43,7 +43,7 @@ for line in log2:
     line = float(line)
     y2.append((line/65535)*3.3)  # Convert to voltage
 log2.close()
-#plt.plot(x2, y2, marker='o', label='IR sensor med skærm uden storlys')
+plt.plot(x2, y2, marker='o', label='IR sensor med skærm uden storlys')
 
 
 
@@ -56,7 +56,7 @@ for line in log3:
     line = float(line)
     y3.append((line/65535)*3.3)  # Convert to voltage
 log3.close()
-#plt.plot(x3, y3, marker='x', label='IR sensor uden skærm med storlys')
+plt.plot(x3, y3, marker='x', label='IR sensor uden skærm med storlys')
 
 x4 = []
 y4 = []
@@ -67,7 +67,7 @@ for line in log4:
     line = float(line)
     y4.append((line/65535)*3.3)  # Convert to voltage
 log4.close()
-#plt.plot(x4, y4, marker='x', label='IR sensor uden skærm uden storlys')
+plt.plot(x4, y4, marker='x', label='IR sensor uden skærm uden storlys')
 
 
 y5 = log5.read().split(',')
@@ -83,7 +83,7 @@ x5 = list(range(len(y5)))
 lx = [0,2400]
 ly = [1.7,1.7]
 
-#plt.plot(lx, ly, ls = '--')
+plt.plot(lx, ly, ls = '--')
 
 plt.legend()
 plt.show()

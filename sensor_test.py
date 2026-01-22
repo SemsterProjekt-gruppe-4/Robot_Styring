@@ -51,7 +51,11 @@ for _ in range(steps):
 motor1.release()
 motor2.release()
 
-time.sleep(2)
+for _ in range(1000):
+    file.write(str(sensor.read_u16()))
+    file.write("\n") 
+
+    time.sleep(0.002)
 
 # Change direction for reverse rotation
 motor1.set_direction(1)
